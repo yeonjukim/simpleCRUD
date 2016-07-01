@@ -21,18 +21,33 @@ public class PostController {
 	private PostDao postDao;
 	
 	@RequestMapping(value="/add",method = RequestMethod.POST)
-	@ResponseBody
-	public Post add(Post post){
-		Post postData = postDao.save(post);
-		return postData;
+	public String add(Post post){
+		 postDao.save(post);
+		return "redirect:/post/list";
 	}
+	
 	@RequestMapping(value="/add",method = RequestMethod.GET)
 	public String add(){
 		return "post/add";
 	}
 	
+	@RequestMapping(value = "/mod/{id}", method = RequestMethod.GET)
+	public String editor(Model model, @PathVariable int id) {
+		Post post = postDao.findOne(id);
+		model.addAttribute("post", post);
+		return "post/mod";
+	}
+	
+	@RequestMapping(value="/mod/{id}",method = RequestMethod.POST)
+	public String postMod(@Valid Post post, BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+			return "post/mod";
+		}
+		postDao.save(post);
+		return "redirect:/post/list";
+	}
+	
 	@RequestMapping("/view/{id}")
-	@ResponseBody
 	public Post view(@PathVariable int id){
 		Post postData = postDao.findOne(id);
 		return postData;
@@ -50,27 +65,7 @@ public class PostController {
 		postDao.delete(id);
 		return "redirect:/post/list";
 	}
-	@RequestMapping(value = "/mod/{id}", method = RequestMethod.GET)
-	public String editor(Model model, @PathVariable int id) {
-		Post post = postDao.findOne(id);
-		model.addAttribute("post", post);
-		return "post/mod";
-	}
 	
-	@RequestMapping(value="/mod/{id}",method = RequestMethod.POST)
-	public String postMod(@Valid Post post, BindingResult bindingResult){
-		if (bindingResult.hasErrors()) {
-			return "post/mod";
-		}
-		postDao.save(post);
-		return "redirect:/post/list";
-	}
-	
-	
-	@RequestMapping("/")
-	public String index(){
-		return "helloHome";
-	}
 }
 
 
