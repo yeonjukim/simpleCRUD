@@ -1,18 +1,18 @@
 package test.dazayo;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/post")
@@ -22,7 +22,8 @@ public class PostController {
 	
 	@RequestMapping(value="/add",method = RequestMethod.POST)
 	public String add(Post post){
-		 postDao.save(post);
+		post.setRegDate(new Date()); 
+		postDao.save(post);
 		return "redirect:/post/list";
 	}
 	
@@ -39,12 +40,14 @@ public class PostController {
 	}
 	
 	@RequestMapping(value="/mod/{id}",method = RequestMethod.POST)
-	public String postMod(@Valid Post post, BindingResult bindingResult){
+	public ModelAndView  postMod(@Valid Post post, BindingResult bindingResult){
 		if (bindingResult.hasErrors()) {
-			return "post/mod";
+			ModelAndView mv = new ModelAndView( "post/mod");
+			mv.addObject("post", post);
+			return mv;
 		}
 		postDao.save(post);
-		return "redirect:/post/list";
+		return new ModelAndView("redirect:/post/list");
 	}
 	
 	@RequestMapping("/view/{id}")

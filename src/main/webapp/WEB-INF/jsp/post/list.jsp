@@ -15,6 +15,7 @@
 				<th>id</th>
 				<th>subject</th>
 				<th>content</th>
+				<th>date</th>
 				<th>-</th>
 				<th>-</th>						
 			</tr>
@@ -24,7 +25,8 @@
 				<tr>
 					<td>${post.id }</td>
 					<td>${post.subject}</td>
-					<td>${post.content}</td>					
+					<td>${post.content}</td>
+					<td>${post.regDate}</td>					
 					<td><a href="./mod/${post.id }">수정</a></td>
 					<td><a href="./del/${post.id }">삭제</a></td>
 				</tr>
