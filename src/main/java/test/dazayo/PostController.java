@@ -62,16 +62,10 @@ public class PostController {
 		if (bindingResult.hasErrors()) {
 			return "post/mod";
 		}
-		return "/post/view/" + postDao.save(post).getId();
+		postDao.save(post);
+		return "redirect:/post/list";
 	}
 	
-	
-	// web :: 
-	@RequestMapping("/jsp")
-	public String jspPage(Model model){
-		model.addAttribute("name","hello springBoot1234");
-		return "hi";
-	}
 	
 	@RequestMapping("/")
 	public String index(){
